@@ -258,6 +258,8 @@ Agar loyiha foydali bo'lsa, ⭐ star bosishni unutmang!
 
 [![Stargazers over time](https://starchart.cc/Makhmud-egp/git-command-trainer.svg)](https://starchart.cc/Makhmud-egp/git-command-trainer)
 
+## Stargazers over time
+[![Stargazers over time](https://starchart.cc/Makhmud-egp/git-command-trainer.svg?variant=adaptive)](https://starchart.cc/Makhmud-egp/git-command-trainer)
 ---
 
 <div align="center">

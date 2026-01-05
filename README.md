@@ -239,12 +239,12 @@ MIT License - erkin foydalaning va o'zgartiring!
 
 ## 👨‍💻 Muallif
 
-**[Makhmud]**
+**Makhmud**
 
 - GitHub: [@Makhmud-egp](https://github.com/Makhmud-egp)
 - Email: osonpy@gmail.com
 - Telegram: @osonpython
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/your-profile)
+- LinkedIn: [Makhmud Djalolov](https://www.linkedin.com/in/makhmud-djalolov-8928b332b/)
 
 ## 🙏 Minnatdorchilik
 

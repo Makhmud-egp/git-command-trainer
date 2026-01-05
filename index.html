@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Command Trainer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .terminal {
+            background: #000;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+            margin-bottom: 20px;
+        }
+        
+        .terminal-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .terminal-button.red { background: #ff5f56; }
+        .terminal-button.yellow { background: #ffbd2e; }
+        .terminal-button.green { background: #27c93f; }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px #00ff00;
+            animation: glow 2s infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px #00ff00; }
+            50% { text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00; }
+        }
+        
+        .scenario {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #00ff00;
+        }
+        
+        .scenario-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #ffff00;
+        }
+        
+        .scenario-description {
+            line-height: 1.6;
+            color: #ffffff;
+        }
+        
+        .command-input-area {
+            margin: 20px 0;
+        }
+        
+        .prompt {
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+        
+        .command-input {
+            width: 100%;
+            background: #000;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        .command-input:focus {
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        }
+        
+        .hints {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #ffff00;
+        }
+        
+        .hint-button {
+            background: #ffff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+        
+        .hint-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
+        }
+        
+        .hint-text {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            background: #000;
+            border-radius: 5px;
+            color: #ffff00;
+        }
+        
+        .hint-text.show {
+            display: block;
+            animation: slideDown 0.3s;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 200px;
+            }
+        }
+        
+        .output {
+            background: #000;
+            padding: 15px;
+            border-radius: 5px;
+            min-height: 100px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+            white-space: pre-wrap;
+        }
+        
+        .success {
+            color: #00ff00;
+            animation: pulse 1s;
+        }
+        
+        .error {
+            color: #ff5555;
+        }
+        
+        .warning {
+            color: #ffff00;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit {
+            background: #00ff00;
+            color: #000;
+        }
+        
+        .btn-skip {
+            background: #ff5555;
+            color: #fff;
+        }
+        
+        .btn-next {
+            background: #ffff00;
+            color: #000;
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .progress-bar {
+            background: #2d2d2d;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #00ff00, #00cc00);
+            height: 100%;
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .stat {
+            background: #2d2d2d;
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #00ff00;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            color: #00ff00;
+        }
+        
+        .stat-label {
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        .completion {
+            text-align: center;
+            padding: 40px;
+            background: #2d2d2d;
+            border-radius: 10px;
+            border: 3px solid #00ff00;
+            animation: fadeIn 1s;
+        }
+        
+        .completion h2 {
+            font-size: 3em;
+            color: #00ff00;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px #00ff00;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-button red"></div>
+                <div class="terminal-button yellow"></div>
+                <div class="terminal-button green"></div>
+            </div>
+            
+            <h1>🚀 GIT COMMAND TRAINER</h1>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="current-level">1</div>
+                    <div class="stat-label">Level</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="correct-commands">0</div>
+                    <div class="stat-label">To'g'ri</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="hints-used">0</div>
+                    <div class="stat-label">Hint</div>
+                </div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress" style="width: 0%">0%</div>
+            </div>
+            
+            <div id="game-container"></div>
+        </div>
+    </div>
+    
+    <script>
+        const scenarios = [
+            {
+                title: "Level 1: Repository Yaratish",
+                description: "Siz yangi loyihani boshladingiz. Git repository yaratishingiz kerak.",
+                correctCommand: "git init",
+                alternatives: ["git init", "git initialize"],
+                hints: [
+                    "Repository yaratish uchun 'git' so'zidan keyin nima kerak?",
+                    "Bu komanda 'init' so'zini o'z ichiga oladi",
+                    "To'liq komanda: git init"
+                ],
+                successMessage: "✅ Ajoyib! Repository yaratildi. .git folder paydo bo'ldi.",
+                tips: "git init - eng birinchi komanda. Bu loyihangizda Git tracking boshlaydi."
+            },
+            {
+                title: "Level 2: Fayllarni Staging",
+                description: "Siz README.md faylini yaratdingiz. Uni staging area'ga qo'shing.",
+                correctCommand: "git add README.md",
+                alternatives: ["git add README.md", "git add readme.md", "git stage README.md"],
+                hints: [
+                    "Fayllarni staging uchun qaysi komanda?",
+                    "git add + fayl nomi",
+                    "git add README.md"
+                ],
+                successMessage: "✅ README.md staging area'ga qo'shildi!",
+                tips: "git add - commitdan oldingi bosqich. Barcha fayllar uchun 'git add .' ishlatiladi."
+            },
+            {
+                title: "Level 3: Birinchi Commit",
+                description: "Staging area'dagi o'zgarishlarni commit qiling. Message: 'Initial commit'",
+                correctCommand: "git commit -m \"Initial commit\"",
+                alternatives: [
+                    "git commit -m \"Initial commit\"",
+                    "git commit -m 'Initial commit'",
+                    "git commit -m Initial commit"
+                ],
+                hints: [
+                    "Commit uchun message berishni unutmang",
+                    "git commit -m 'sizning message'",
+                    "git commit -m \"Initial commit\""
+                ],
+                successMessage: "✅ Birinchi commit muvaffaqiyatli!",
+                tips: "git commit -m 'message' - o'zgarishlarni saqlash. Message qisqa va aniq bo'lishi kerak."
+            },
+            {
+                title: "Level 4: Branch Yaratish",
+                description: "Yangi feature ustida ishlashingiz kerak. 'feature/login' nomli branch yarating.",
+                correctCommand: "git branch feature/login",
+                alternatives: [
+                    "git branch feature/login",
+                    "git checkout -b feature/login"
+                ],
+                hints: [
+                    "Branch yaratish uchun 'git branch' ishlatiladi",
+                    "git branch + branch nomi",
+                    "git branch feature/login"
+                ],
+                successMessage: "✅ feature/login branch yaratildi!",
+                tips: "git branch <name> - yangi branch yaratadi. git checkout -b <name> - yaratib, darhol o'tadi."
+            },
+            {
+                title: "Level 5: Branch'ga O'tish",
+                description: "feature/login branch'ga o'ting.",
+                correctCommand: "git checkout feature/login",
+                alternatives: [
+                    "git checkout feature/login",
+                    "git switch feature/login"
+                ],
+                hints: [
+                    "Branch'lar orasida harakat uchun checkout",
+                    "git checkout + branch nomi",
+                    "git checkout feature/login"
+                ],
+                successMessage: "✅ feature/login'ga o'tildi!",
+                tips: "git checkout <branch> - branch'ga o'tish. Yangi Git'da 'git switch' ham ishlatiladi."
+            },
+            {
+                title: "Level 6: O'zgarishlarni Stash Qilish",
+                description: "Siz feature ustida ishlayapsiz, lekin urgent bug fix kerak. O'zgarishlarni stash qiling.",
+                correctCommand: "git stash",
+                alternatives: [
+                    "git stash",
+                    "git stash save",
+                    "git stash save 'WIP'"
+                ],
+                hints: [
+                    "Vaqtincha saqlash uchun stash",
+                    "Oddiy komanda: git stash",
+                    "git stash"
+                ],
+                successMessage: "✅ O'zgarishlar stash qilindi!",
+                tips: "git stash - o'zgarishlarni vaqtincha saqlaydi. git stash pop - qaytarib oladi."
+            },
+            {
+                title: "Level 7: Tag Yaratish",
+                description: "Production'ga deploy qilish vaqti! v1.0.0 annotated tag yarating.",
+                correctCommand: "git tag -a v1.0.0 -m \"Version 1.0.0\"",
+                alternatives: [
+                    "git tag -a v1.0.0 -m \"Version 1.0.0\"",
+                    "git tag -a v1.0.0 -m 'Version 1.0.0'",
+                    "git tag -a v1.0.0 -m Version 1.0.0"
+                ],
+                hints: [
+                    "Annotated tag uchun -a flag kerak",
+                    "git tag -a <name> -m 'message'",
+                    "git tag -a v1.0.0 -m \"Version 1.0.0\""
+                ],
+                successMessage: "✅ v1.0.0 tag yaratildi!",
+                tips: "git tag -a - annotated tag yaratadi. Production uchun doim annotated tag ishlatiladi."
+            },
+            {
+                title: "Level 8: Remote Qo'shish",
+                description: "GitHub'ga push qilish uchun origin remote qo'shing: https://github.com/user/repo.git",
+                correctCommand: "git remote add origin https://github.com/user/repo.git",
+                alternatives: [
+                    "git remote add origin https://github.com/user/repo.git"
+                ],
+                hints: [
+                    "Remote qo'shish: git remote add",
+                    "git remote add <name> <url>",
+                    "git remote add origin https://github.com/user/repo.git"
+                ],
+                successMessage: "✅ Origin remote qo'shildi!",
+                tips: "git remote add origin <url> - GitHub yoki GitLab'ga bog'lanish uchun."
+            },
+            {
+                title: "Level 9: Reset Soft",
+                description: "Oxirgi commit'ni bekor qiling, lekin o'zgarishlarni Index'da qoldiring.",
+                correctCommand: "git reset --soft HEAD~1",
+                alternatives: [
+                    "git reset --soft HEAD~1",
+                    "git reset --soft HEAD~",
+                    "git reset --soft HEAD^"
+                ],
+                hints: [
+                    "Reset --soft Index'ni saqlab qoladi",
+                    "git reset --soft HEAD~1",
+                    "HEAD~1 - bir commit orqaga"
+                ],
+                successMessage: "✅ Soft reset bajarildi! O'zgarishlar Index'da.",
+                tips: "git reset --soft - eng xavfsiz reset. O'zgarishlar Index'da qoladi."
+            },
+            {
+                title: "Level 10: Cherry-Pick",
+                description: "Master'dagi abc123 commit'ni hozirgi branch'ga cherry-pick qiling.",
+                correctCommand: "git cherry-pick abc123",
+                alternatives: [
+                    "git cherry-pick abc123"
+                ],
+                hints: [
+                    "Cherry-pick - commit nusxalash",
+                    "git cherry-pick <SHA>",
+                    "git cherry-pick abc123"
+                ],
+                successMessage: "🎉 TABRIKLAYMAN! Barcha levellarni o'tdingiz!",
+                tips: "git cherry-pick - bitta commit'ni boshqa branch'ga nusxalash. Hotfix uchun juda foydali."
+            }
+        ];
+        
+        let currentLevel = 0;
+        let correctCount = 0;
+        let hintsUsed = 0;
+        let currentHintIndex = 0;
+        
+        function renderScenario() {
+            const scenario = scenarios[currentLevel];
+            const container = document.getElementById('game-container');
+            
+            const html = `
+                <div class="scenario">
+                    <div class="scenario-title">${scenario.title}</div>
+                    <div class="scenario-description">${scenario.description}</div>
+                </div>
+                
+                <div class="command-input-area">
+                    <div class="prompt">$ <span style="color: #ffff00;">Komandani kiriting:</span></div>
+                    <input type="text" class="command-input" id="command-input" 
+                           placeholder="git ..." 
+                           onkeypress="if(event.key==='Enter') submitCommand()">
+                </div>
+                
+                <div class="hints">
+                    <button class="hint-button" onclick="showHint()">💡 Hint</button>
+                    <div class="hint-text" id="hint-text"></div>
+                </div>
+                
+                <div class="output" id="output">Komandani kiriting va Enter bosing yoki Submit tugmasini bosing...</div>
+                
+                <div class="button-group">
+                    <button class="btn-submit" onclick="submitCommand()">▶ Submit</button>
+                    <button class="btn-skip" onclick="skipLevel()">⏭ Skip</button>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            currentHintIndex = 0;
+            document.getElementById('command-input').focus();
+            updateStats();
+        }
+        
+        function showHint() {
+            const scenario = scenarios[currentLevel];
+            const hintText = document.getElementById('hint-text');
+            
+            if (currentHintIndex < scenario.hints.length) {
+                hintText.textContent = scenario.hints[currentHintIndex];
+                hintText.classList.add('show');
+                currentHintIndex++;
+                hintsUsed++;
+                updateStats();
+            } else {
+                hintText.textContent = "Boshqa hint yo'q! 😅";
+                hintText.classList.add('show');
+            }
+        }
+        
+        function submitCommand() {
+            const input = document.getElementById('command-input').value.trim();
+            const scenario = scenarios[currentLevel];
+            const output = document.getElementById('output');
+            
+            if (!input) {
+                output.innerHTML = '<span class="error">❌ Komandani kiriting!</span>';
+                return;
+            }
+            
+            const isCorrect = scenario.alternatives.some(alt => 
+                input.toLowerCase() === alt.toLowerCase()
+            );
+            
+            if (isCorrect) {
+                correctCount++;
+                output.innerHTML = `
+                    <span class="success">${scenario.successMessage}</span>
+                    
+<span class="warning">💡 Pro Tip: ${scenario.tips}</span>
+                `;
+                
+                setTimeout(() => {
+                    if (currentLevel < scenarios.length - 1) {
+                        currentLevel++;
+                        renderScenario();
+                    } else {
+                        showCompletion();
+                    }
+                }, 3000);
+            } else {
+                output.innerHTML = `
+                    <span class="error">❌ Noto'g'ri komanda: ${input}</span>
+                    <span class="warning">
+Hint kerakmi? 💡 tugmasini bosing.
+Yoki Skip tugmasini bosib, keyingisiga o'ting.</span>
+                `;
+            }
+        }
+        
+        function skipLevel() {
+            const scenario = scenarios[currentLevel];
+            const output = document.getElementById('output');
+            
+            output.innerHTML = `
+                <span class="warning">⏭ Level o'tkazib yuborildi</span>
+                <span style="color: #ffff00;">To'g'ri javob: ${scenario.correctCommand}</span>
+            `;
+            
+            setTimeout(() => {
+                if (currentLevel < scenarios.length - 1) {
+                    currentLevel++;
+                    renderScenario();
+                } else {
+                    showCompletion();
+                }
+            }, 2000);
+        }
+        
+        function updateStats() {
+            document.getElementById('current-level').textContent = currentLevel + 1;
+            document.getElementById('correct-commands').textContent = correctCount;
+            document.getElementById('hints-used').textContent = hintsUsed;
+            
+            const progress = ((currentLevel + 1) / scenarios.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+            document.getElementById('progress').textContent = Math.round(progress) + '%';
+        }
+        
+        function showCompletion() {
+            const percentage = (correctCount / scenarios.length) * 100;
+            let title, message;
+            
+            if (percentage === 100 && hintsUsed === 0) {
+                title = "🏆 PERFECT SCORE!";
+                message = "Siz hech qanday yordam olmasdan barcha levellarni o'tdingiz!";
+            } else if (percentage >= 80) {
+                title = "🌟 EXCELLENT!";
+                message = "Siz Git komandalarini juda yaxshi bilasiz!";
+            } else if (percentage >= 60) {
+                title = "✨ GOOD JOB!";
+                message = "Yaxshi natija! Amaliyotni davom ettiring!";
+            } else {
+                title = "📚 KEEP LEARNING!";
+                message = "Yomon emas! Yana bir bor sinab ko'ring!";
+            }
+            
+            document.getElementById('game-container').innerHTML = `
+                <div class="completion">
+                    <h2>${title}</h2>
+                    <p style="font-size: 1.5em; margin: 20px 0;">
+                        ${correctCount} / ${scenarios.length} to'g'ri<br>
+                        ${hintsUsed} hint ishlatildi
+                    </p>
+                    <p style="color: #888; margin: 20px 0; font-size: 1.2em;">
+                        ${message}
+                    </p>
+                    <button class="btn-submit" onclick="location.reload()" 
+                            style="font-size: 1.2em; padding: 15px 40px; margin-top: 20px;">
+                        🔄 Qaytadan O'ynash
+                    </button>
+                </div>
+            `;
+        }
+        
+        // Start game
+        renderScenario();
+    </script>
+</body>
+</html>

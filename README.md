@@ -243,7 +243,7 @@ MIT License - erkin foydalaning va o'zgartiring!
 
 - GitHub: [@Makhmud-egp](https://github.com/Makhmud-egp)
 - Email: osonpy@gmail.com
-- Telegram: @osonpython
+- Telegram: [@osonpython](https://t.me/osonpython)
 - LinkedIn: [Makhmud Djalolov](https://www.linkedin.com/in/makhmud-djalolov-8928b332b/)
 
 ## 🙏 Minnatdorchilik
@@ -256,10 +256,9 @@ MIT License - erkin foydalaning va o'zgartiring!
 
 Agar loyiha foydali bo'lsa, ⭐ star bosishni unutmang!
 
-[![Stargazers over time](https://starchart.cc/Makhmud-egp/git-command-trainer.svg)](https://starchart.cc/Makhmud-egp/git-command-trainer)
-
-## Stargazers over time
 [![Stargazers over time](https://starchart.cc/Makhmud-egp/git-command-trainer.svg?variant=adaptive)](https://starchart.cc/Makhmud-egp/git-command-trainer)
+
+
 ---
 
 <div align="center">
